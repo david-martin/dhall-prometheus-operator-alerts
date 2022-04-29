@@ -1,12 +1,18 @@
 .DEFAULT_GOAL := all
 .PHONY: all
 
-targets := $(patsubst %.dhall,%.yaml,$(shell ls *.dhall))
+targetdir := target
+targets := $(addprefix $(targetdir)/,$(patsubst %.dhall,%.yaml,$(shell ls *.dhall)))
 
 all: ${targets}
 
 clean:
 	rm ${targets}
 
-%.yaml: %.dhall ./dhall/**/*.dhall
+$(targetdir)/%.yaml: %.dhall ./dhall/**/*.dhall
 	dhall-to-yaml --generated-comment --file $< --output $@
+
+$(targets): | $(targetdir)
+
+$(targetdir):
+	mkdir $(targetdir)
