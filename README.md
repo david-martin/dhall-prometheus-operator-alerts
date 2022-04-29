@@ -6,14 +6,4 @@
 
 ## Generating files
 
-Generate the prometheus rules file with:
-
-```bash
-make alert-rules.yaml
-```
-
-Generate the PrometheusRules CustomResource with:
-
-```bash
-make alert-rules-cr.yaml
-```
+Run `make` to re-generate the yaml files in the target directory, after making changes to any of the dhall files.

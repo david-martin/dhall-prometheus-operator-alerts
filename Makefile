@@ -1,5 +1,18 @@
-alert-rules.yaml: alert-rules.dhall dhall/**/*.dhall
-	dhall-to-yaml --generated-comment --file alert-rules.dhall --output alert-rules.yaml
+.DEFAULT_GOAL := all
+.PHONY: all
 
-alert-rules-cr.yaml: alert-rules.yaml alert-rules-cr.dhall
-	dhall-to-yaml --generated-comment --file alert-rules-cr.dhall --output alert-rules-cr.yaml
+targetdir := target
+targets := $(addprefix $(targetdir)/,$(patsubst %.dhall,%.yaml,$(shell ls *.dhall)))
+
+all: ${targets}
+
+clean:
+	rm ${targets}
+
+$(targetdir)/%.yaml: %.dhall ./dhall/**/*.dhall
+	dhall-to-yaml --generated-comment --file $< --output $@
+
+$(targets): | $(targetdir)
+
+$(targetdir):
+	mkdir $(targetdir)
